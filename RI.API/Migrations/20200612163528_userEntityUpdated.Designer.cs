@@ -9,14 +9,46 @@ using RI.api.Data;
 namespace RI.API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20200609050306_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20200612163528_userEntityUpdated")]
+    partial class userEntityUpdated
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "3.1.4");
+
+            modelBuilder.Entity("RI.api.Models.User", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("accountCreatedOn")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("dateOfBirth")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("email")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("gender")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("name")
+                        .HasColumnType("TEXT");
+
+                    b.Property<byte[]>("passwordHash")
+                        .HasColumnType("BLOB");
+
+                    b.Property<byte[]>("passwordSalt")
+                        .HasColumnType("BLOB");
+
+                    b.HasKey("id");
+
+                    b.ToTable("Users");
+                });
 
             modelBuilder.Entity("RI.api.Models.Video", b =>
                 {

@@ -10,6 +10,7 @@ namespace RI.api.Data
         public DataContext(DbContextOptions<DataContext> options):base(options){ }
 
         public DbSet<Video> Videos { get; set; }
+        public DbSet<User> Users {get;set;}
 
     }
 }

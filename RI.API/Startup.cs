@@ -12,6 +12,9 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using RI.api.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace RI.API
 {
@@ -34,6 +37,24 @@ namespace RI.API
             services.AddCors();
 
 
+            // repository service
+            // Scoped makes a single Instance for a http session
+            // Singleton would have made a single instance available to all 
+            // Trascient would have made a new instance on every hit
+            services.AddScoped<IAuthRepository,AuthRepository>();
+
+            //Authorization Scheme Defined
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>{
+                options.TokenValidationParameters = new TokenValidationParameters{
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII
+                        .GetBytes(Configuration.GetSection("AppSettings:Token").Value)),
+                    ValidateIssuer = false,
+                    ValidateAudience = false    
+                        
+                };
+            });
+
             services.AddControllers();
         }
 
@@ -49,6 +70,8 @@ namespace RI.API
 
             //just added to receive request from any where
             app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+            app.UseAuthentication();
+
 
             app.UseRouting();
 
